@@ -41,12 +41,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.UseAuthorization();
 //app.UseAuthentication();
+//app.UseAuthorization();
 app.UseCors("AllowAllOrigins");
 
 
 // Map custom endpoints
 app.MapAuthEndpoints();
+app.MapJournalEndpoints();
 
 app.Run();

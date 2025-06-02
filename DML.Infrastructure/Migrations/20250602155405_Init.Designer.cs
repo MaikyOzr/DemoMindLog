@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DML.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250602135215_Init")]
+    [Migration("20250602155405_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -28,68 +28,32 @@ namespace DML.Infrastructure.Migrations
             modelBuilder.Entity("DML.Domain.Entity.JournalEntry", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Mood")
+                    b.Property<int?>("Mood")
                         .HasColumnType("integer");
 
                     b.Property<string>("Note")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("TagId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Tag")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TagId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable((string)null);
-
-                    b.ToView("JournalEntries", (string)null);
-                });
-
-            modelBuilder.Entity("DML.Domain.Entity.JournalEntryTag", b =>
-                {
-                    b.Property<Guid>("JournalEntryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("JournalEntryId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("JournalEntryTags", (string)null);
-                });
-
-            modelBuilder.Entity("DML.Domain.Entity.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("Tags", (string)null);
+                    b.ToTable("JournalEntries", (string)null);
                 });
 
             modelBuilder.Entity("DML.Domain.Entity.User", b =>
@@ -159,7 +123,7 @@ namespace DML.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -294,36 +258,9 @@ namespace DML.Infrastructure.Migrations
 
             modelBuilder.Entity("DML.Domain.Entity.JournalEntry", b =>
                 {
-                    b.HasOne("DML.Domain.Entity.Tag", null)
+                    b.HasOne("DML.Domain.Entity.User", null)
                         .WithMany("JournalEntries")
-                        .HasForeignKey("TagId");
-
-                    b.HasOne("DML.Domain.Entity.User", "User")
-                        .WithMany("JournalEntries")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DML.Domain.Entity.JournalEntryTag", b =>
-                {
-                    b.HasOne("DML.Domain.Entity.JournalEntry", "JournalEntry")
-                        .WithMany()
-                        .HasForeignKey("JournalEntryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DML.Domain.Entity.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JournalEntry");
-
-                    b.Navigation("Tag");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -375,11 +312,6 @@ namespace DML.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DML.Domain.Entity.Tag", b =>
-                {
-                    b.Navigation("JournalEntries");
                 });
 
             modelBuilder.Entity("DML.Domain.Entity.User", b =>

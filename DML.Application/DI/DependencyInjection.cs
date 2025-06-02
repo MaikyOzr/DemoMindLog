@@ -1,4 +1,5 @@
-﻿using DML.Application.SignUp.Commands;
+﻿using DML.Application.Journal.Commands;
+using DML.Application.SignUp.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DML.Application.DI;
@@ -11,6 +12,7 @@ public static class DependencyInjection
         // Example: services.AddScoped<IMyAppService, MyAppService>();
         services.AddScoped<SignUpCommand>();
         services.AddScoped<SignInCommnad>();
+        services.AddScoped<CreateJournalCommand>();
 
         return services;
     }
