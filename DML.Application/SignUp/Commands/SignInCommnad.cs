@@ -1,12 +1,13 @@
-﻿using DML.Application.SignUp.Models.Requests;
+﻿using DML.Application.JwtService;
+using DML.Application.SignUp.Models.Requests;
 using DML.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace DML.Application.SignUp.Commands;
 
-public class SignInCommnad(AppDbContext appDbContext)
+public class SignInCommnad(AppDbContext appDbContext, JwtProvider provider)
 {
-    public async Task<bool> ExecuteAsync(SingInRequest request)
+    public async Task<string> ExecuteAsync(SingInRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             throw new Exception("Email and Password are required");
@@ -15,6 +16,8 @@ public class SignInCommnad(AppDbContext appDbContext)
         var user = await appDbContext.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email) ?? throw new Exception("User doesn`t exist!");
 
-        return true;
+        var token = provider.GenerateToken(user.Id);
+
+        return token;
     }
 }

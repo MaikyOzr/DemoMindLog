@@ -43,7 +43,7 @@ namespace DML.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -255,9 +255,13 @@ namespace DML.Infrastructure.Migrations
 
             modelBuilder.Entity("DML.Domain.Entity.JournalEntry", b =>
                 {
-                    b.HasOne("DML.Domain.Entity.User", null)
+                    b.HasOne("DML.Domain.Entity.User", "User")
                         .WithMany("JournalEntries")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -15,8 +15,7 @@ public static class AuthEndpoint
 
         app.MapPost("/auth/signin", async (SingInRequest request, SignInCommnad command) =>
         {
-            await command.ExecuteAsync(request);
-            return Results.Ok("User signed in successfully.");
+            return await command.ExecuteAsync(request);
         });
     }
 }
