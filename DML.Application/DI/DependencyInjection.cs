@@ -8,11 +8,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        // Register your application services here
-        // Example: services.AddScoped<IMyAppService, MyAppService>();
         services.AddScoped<SignUpCommand>();
         services.AddScoped<SignInCommnad>();
         services.AddScoped<CreateJournalCommand>();
+        services.AddScoped<GetJournalCommand>();
 
         return services;
     }
