@@ -12,6 +12,9 @@ public static class DependencyInjection
         services.AddScoped<SignInCommnad>();
         services.AddScoped<CreateJournalCommand>();
         services.AddScoped<GetJournalCommand>();
+        services.AddScoped<GetByIdJournalCommand>();
+        services.AddScoped<UpdateJournalCommand>();
+        services.AddScoped<DeleteJournalCommand>();
 
         return services;
     }

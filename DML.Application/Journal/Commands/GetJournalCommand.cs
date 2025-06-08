@@ -14,12 +14,13 @@ public class GetJournalCommand(AppDbContext appDbContext, IHttpContextAccessor h
         if (string.IsNullOrWhiteSpace(userId.ToString()))
             throw new Exception("User ID is required");
 
-        var existUser = await appDbContext.Users.FindAsync(Guid.Parse(userId.ToString())) ?? throw new Exception("User not found!");
+        var existUser = await appDbContext.Users.FindAsync(userId) ?? throw new Exception("User not found!");
 
         var journals = await appDbContext.JournalEntries
         .Where(x => x.UserId == userId)
         .Select(journal => new GetJournalResponse
         {
+            Id = journal.Id,
             Note = journal.Note,
             Mood = (Models.Enums.MoodEnum?)journal.Mood,
             Tag = journal.Tag,
